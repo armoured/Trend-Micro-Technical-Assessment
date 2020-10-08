@@ -1,0 +1,47 @@
+service: ddb
+frameworkVersion: "=2.5.0"
+
+package:
+  exclude:
+    - .vscode/**
+    - .idea/**
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, "dev"}
+  region:  ${opt:region, "ap-southeast-2"}
+  stackName: ${self:service}-${self:provider.stage}
+  environment:
+    STAGE: ${self:provider.stage}
+
+custom:
+  dynamodb:
+    # Users Table Name
+    users: ${self:service}-users-${self:provider.stage}
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: 'Retain'
+      Properties:
+        AttributeDefinitions:
+          - 
+            AttributeName: id
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: "HASH"
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.dynamodb.users}
+
+  Outputs:
+
+    # Users Table
+    UsersTableNameExport:
+      Description: Users table name
+      Value: ${self:custom.dynamodb.users}
+      Export:
+        Name: UsersTableName-${self:provider.stage}
