@@ -1,0 +1,26 @@
+service: users
+frameworkVersion: "=2.5.0"
+
+package:
+  exclude:
+    - .vscode/**
+    - .idea/**
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, "dev"}
+  region:  ${opt:region, "ap-southeast-2"}
+  stackName: ${self:service}-${self:provider.stage}
+  environment:
+    STAGE: ${self:provider.stage}
+    DYNAMODB_USERS: ${cf:ddb-${self:provider.stage}.UsersTableNameExport}
+  
+functions:
+  create_user:
+    handler: users/handler.create_user
+    name: ${self:provider.stackName}-create_user
+
+  get_users:
+    handler: users/handler.get_users
+    name: ${self:provider.stackName}-get_users
