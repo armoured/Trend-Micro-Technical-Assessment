@@ -1,0 +1,84 @@
+service: users
+frameworkVersion: "=2.5.0"
+
+package:
+  exclude:
+    - .vscode/**
+    - .idea/**
+
+plugins:
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, "dev"}
+  region:  ${opt:region, "ap-southeast-2"}
+  stackName: ${self:service}-${self:provider.stage}
+  environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    DYNAMODB_USERS: ${cf:ddb-${self:provider.stage}.UsersTableNameExport}
+  role: UsersServiceRole
+  
+functions:
+  create_user:
+    handler: users/handler.create_user
+    name: ${self:provider.stackName}-create_user
+    events:
+      - http:
+          path: user
+          method: post
+
+  get_users:
+    handler: users/handler.get_users
+    name: ${self:provider.stackName}-get_users
+    events:
+      - http:
+          path: users
+          method: get
+
+resources:
+  Resources:
+
+    UsersServiceRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: UsersServiceRole-${self:provider.stage}
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            -
+              Effect: "Allow"
+              Principal:
+                Service:
+                  - "lambda.amazonaws.com"
+                  - "events.amazonaws.com"
+                  - "apigateway.amazonaws.com"
+              Action:
+                - "sts:AssumeRole"
+        Path: "/"
+        Policies:
+          -
+            PolicyName: DynamoDBPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                -
+                  Effect: "Allow"
+                  Action:
+                    - dynamodb:DescribeTable
+                    - dynamodb:Query
+                    - dynamodb:Scan
+                    - dynamodb:GetItem
+                    - dynamodb:PutItem
+                    - dynamodb:UpdateItem
+                    - dynamodb:DescribeStream
+                    - dynamodb:GetRecords
+                    - dynamodb:GetShardIterator
+                    - dynamodb:ListStreams
+                    - dynamodb:BatchWriteItem
+                    - dynamodb:BatchGetItem
+                  Resource:
+                    - "arn:aws:dynamodb:*:#{AWS::AccountId}:table/${self:provider.environment.DYNAMODB_USERS}"
+                    - "arn:aws:dynamodb:*:#{AWS::AccountId}:table/${self:provider.environment.DYNAMODB_USERS}/index/*"
