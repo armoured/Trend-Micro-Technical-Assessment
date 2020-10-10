@@ -31,7 +31,7 @@ class UserManager {
         if (!valid) {
             const message = "Missing key " + key + " in body"
             console.log(message)
-            response = util.handle_response(400, message, event);
+            response = util.handle_error(400, message);
             callback(null, response);
             return;
         }
@@ -39,7 +39,7 @@ class UserManager {
         // Check the email is in a valid format
         if (!(util.validate_email(body.email))) {
             console.log("invalid email format")
-            response = util.handle_response(400, 'Invalid Email Format', event);
+            response = util.handle_error(400, 'Invalid Email Format');
             callback(null, response);
             return;
         }
@@ -56,8 +56,7 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
-            console.log(err, err.stack);
-            response = util.handle_response(500, 'Internal Server Error', event)
+            response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
             return;
         }
@@ -65,7 +64,7 @@ class UserManager {
         // If this is true then a user exists with the given email. 
         if (result && result.Count !== 0) {
             console.log("User already exists");
-            response = util.handle_response(400, 'User Already Exists', event)
+            response = util.handle_error(400, 'User Already Exists')
             callback(null, response)
             return;
         }
@@ -82,27 +81,32 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
-            console.log(err, err.stack);
-            response = util.handle_response(500, 'Internal Server Error', event)
+            response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
             return;
         }
 
         // The user has been successfully created.
-        console.log(result);
         console.log("User Successfully Created");
-        // TODO return actual user data
-        response = util.handle_response(201, 'User Successfully Created', event);
+
+        const user = {
+            id: id,
+            firstname: body.firstname,
+            lastname: body.lastname,
+            email: body.email,
+            username: body.username
+        }
+      
+        response = util.handle_response(201, user);
         callback(null, response);
         return;
-
     }
 
     async get_users(event, callback) {
 
         var response;   
 
-        response = util.handle_response(200, 'Get Users', event);
+        response = util.handle_response(200, 'Get Users');
 
         callback(null, response);
         return;

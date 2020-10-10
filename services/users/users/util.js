@@ -5,11 +5,11 @@ module.exports.validate_email = (email) => {
     return re.test(email);
 }
 
-module.exports.handle_response = (status_code, message, event) => {
+module.exports.handle_response = (status_code, data) => {
     return {
       statusCode: status_code,
       body: JSON.stringify({
-        message: message
+        data: data
       })
     };
 }

@@ -3,7 +3,7 @@
 var UserManager = require('./manager');
 var util = require('./util');
 
-module.exports.handle_http = async (event, context, callback) => {
+module.exports.handle_http = (event, context, callback) => {
 
   var user_manager = new UserManager();
 
@@ -14,7 +14,7 @@ module.exports.handle_http = async (event, context, callback) => {
   }
 
   const msg = 'Unknown Route or httpMethod for ' + event.path
-  return util.handle_error(404, msg, event);
+  return util.handle_error(404, msg);
 
 }
 
