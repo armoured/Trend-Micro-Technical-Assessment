@@ -23,7 +23,7 @@ provider:
   
 functions:
   create_user:
-    handler: users/handler.create_user
+    handler: users/handler.handle_http
     name: ${self:provider.stackName}-create_user
     events:
       - http:
@@ -31,7 +31,7 @@ functions:
           method: post
 
   get_users:
-    handler: users/handler.get_users
+    handler: users/handler.handle_http
     name: ${self:provider.stackName}-get_users
     events:
       - http:
