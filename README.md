@@ -17,5 +17,6 @@ node -e 'require("./users/handler").handle_http({"path": "/users", "httpMethod":
     "firstname": "Mitchell",
     "lastname": "Shelton",
     "email": "mitchellshelton97@gmail.com",
-    "username": "mitty"
+    "username": "mitty",
+    "credentials": "password"
 }
