@@ -6,11 +6,19 @@ module.exports.get_user_from_email = (email) => {
         TableName: DYNAMODB_USERS,
         IndexName: 'EmailIndex',
         KeyConditionExpression: 'email = :email',
+        ProjectionExpression: "id,firstname,lastname,email,username",
         ExpressionAttributeValues: {
             ':email': email
         }
     }
 };
+
+module.exports.scan_users = () => {
+    return {
+        TableName: DYNAMODB_USERS,
+        ProjectionExpression: "id,firstname,lastname,email,username"
+    }
+}
 
 module.exports.put_user = (id, body) => {
     return {
@@ -20,7 +28,8 @@ module.exports.put_user = (id, body) => {
             firstname: body.firstname,
             lastname: body.lastname,
             email: body.email,
-            username: body.username
+            username: body.username,
+            credentials: body.credentials
         }
     }
 }

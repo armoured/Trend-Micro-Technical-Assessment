@@ -26,7 +26,7 @@ class UserManager {
         // const body = event.body
 
         // Check firstname, lastname, email and username in body
-        const body_keys = ['firstname', 'lastname', 'email', 'username']
+        const body_keys = ['firstname', 'lastname', 'email', 'username', 'credentials']
         const [ valid, key ] = util.validate_body(body_keys, body)
         if (!valid) {
             const message = "Missing key " + key + " in body"
@@ -104,9 +104,28 @@ class UserManager {
 
     async get_users(event, callback) {
 
-        var response;   
 
-        response = util.handle_response(200, 'Get Users');
+        var response;
+
+        const params = queries.scan_users();
+        try {
+            var result = await this.document_client.scan(params, (err, data) => {
+                if (err) return err;
+                else return data;
+            }).promise();
+        } catch (err) {
+            response = util.handle_error(err.statusCode, err.code);
+            callback(null, response)
+            return;
+        }
+
+        const data = {
+            "Items": result.Items
+        }
+
+        console.log(data)
+
+        response = util.handle_response(200, data);
 
         callback(null, response);
         return;

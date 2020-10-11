@@ -79,18 +79,41 @@ resources:
                 -
                   Effect: "Allow"
                   Action:
-                    - dynamodb:DescribeTable
-                    - dynamodb:Query
-                    - dynamodb:Scan
-                    - dynamodb:GetItem
                     - dynamodb:PutItem
                     - dynamodb:UpdateItem
-                    - dynamodb:DescribeStream
-                    - dynamodb:GetRecords
-                    - dynamodb:GetShardIterator
-                    - dynamodb:ListStreams
                     - dynamodb:BatchWriteItem
-                    - dynamodb:BatchGetItem
                   Resource:
                     - "arn:aws:dynamodb:*:#{AWS::AccountId}:table/${self:provider.environment.DYNAMODB_USERS}"
                     - "arn:aws:dynamodb:*:#{AWS::AccountId}:table/${self:provider.environment.DYNAMODB_USERS}/index/*"
+          -
+            PolicyName: WriteOnlyForCredentials
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                -
+                  Effect: "Allow"
+                  Action:
+                    - dynamodb:Scan
+                    - dynamodb:Query
+                    - dynamodb:GetItem
+                    - dynamodb:BatchGetItem
+                    - dynamodb:GetRecords
+                    - dynamodb:GetShardIterator
+                    - dynamodb:ListStreams
+                  Resource:
+                    - "arn:aws:dynamodb:*:#{AWS::AccountId}:table/${self:provider.environment.DYNAMODB_USERS}"
+                    - "arn:aws:dynamodb:*:#{AWS::AccountId}:table/${self:provider.environment.DYNAMODB_USERS}/index/*"
+                  Condition:
+                    ForAllValues:StringEquals:
+                      dynamodb:Attributes:
+                        - "id"
+                        - "firstname"
+                        - "lastname"
+                        - "email"
+                        - "username"
+                    StringEqualsIfExists:
+                      dynamodb:Select: "SPECIFIC_ATTRIBUTES"
+                      dynamodb:ReturnValues:
+                        - "NONE"
+                        - "UPDATED_OLD"
+                        - "UPDATED_NEW"
