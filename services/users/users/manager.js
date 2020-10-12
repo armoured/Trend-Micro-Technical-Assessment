@@ -12,6 +12,7 @@ class UserManager {
 
     constructor() {
        this.document_client = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10', region: REGION});
+       this.kms = new AWS.KMS({apiVersion: '2014-11-01', region: REGION});
     }
 
     dispatch(method, event, callback) {
@@ -43,7 +44,7 @@ class UserManager {
             callback(null, response);
             return;
         }
-        
+
         // Check the user doesn't already exist by querying
         // for their email from the email GSI on the users tables.
         // We cannot query the user by uuid as this does not come
@@ -56,6 +57,7 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
+            console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
             return;
@@ -69,18 +71,60 @@ class UserManager {
             return;
         }
 
-        // At this point, we can create a new user.
+        
         // Generate a uuid as the hash key for the user
         // so that dynamodb will have even partitioning
         // of data.
         const id = uuid.v4();
-        params = queries.put_user(id, body);
+        
+        // Create KMS CMK
+        params = {
+            Tags: [{
+                TagKey: "CreatedBy", 
+                TagValue: id
+            }]
+        };
+        try {
+            result = await this.kms.createKey(params, (err, data) => {
+                if (err) return err;
+                else return data;
+            }).promise();
+        } catch(err) {
+            console.log(err)
+            response = util.handle_error(err.statusCode, err.code);
+            callback(null, response)
+            return;
+        }
+
+        const cmk_key_id = result.KeyMetadata.KeyId
+
+        // Encrypt User Credentials with the newly created KMS CMK
+        params = {
+            KeyId: cmk_key_id,
+            Plaintext: body.credentials
+        };
+        try {
+            result = await this.kms.encrypt(params, (err, data) => {
+                if (err) return err;
+                else return data;
+            }).promise();
+        } catch (err) {
+            console.log(err)
+            response = util.handle_error(err.statusCode, err.code);
+            callback(null, response)
+            return;
+        }
+
+        // At this point, we can create a new user.
+        const ciphertext_credentials = result.CiphertextBlob;
+        params = queries.put_user(id, body, ciphertext_credentials);
         try {
             result = await this.document_client.put(params, (err, data) => {
                 if (err) return err;
                 else return data;
             }).promise();
         } catch (err) {
+            console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
             return;

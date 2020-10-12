@@ -7,7 +7,7 @@ SLS_DEBUG=1 AWS_SDK_LOAD_CONFIG=true sls deploy --aws-profile=default --region=a
 
 # Run Locally
 
-node -e 'require("./users/handler").handle_http({"body": {"firstname": "a", "lastname": "b", "email": "mitchellshelton97@gmail.com", "username": "d", "credentials": "password"}, "path": "/user", "httpMethod": "POST"}, null, ()=>{})'
+node -e 'require("./users/handler").handle_http({"body": {"firstname": "a", "lastname": "b", "email": "mitchellshelton97@gmail.com", "username": "d", "credentials": "password"}, "path": "/user", "httpMethod": "POST"}, null, (a, b)=>{console.log(b)})'
 
 node -e 'require("./users/handler").handle_http({"path": "/users", "httpMethod": "GET"}, null, ()=>{})'
 
