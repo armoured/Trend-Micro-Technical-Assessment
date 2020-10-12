@@ -33,8 +33,21 @@ resources:
             AttributeName: id
             AttributeType: "S"
           - 
+            AttributeName: firstname
+            AttributeType: "S"
+          - 
+            AttributeName: lastname
+            AttributeType: "S"
+          - 
             AttributeName: email
             AttributeType: "S"
+          -
+            AttributeName: username
+            AttributeType: "S"
+          - 
+            AttributeName: credentials
+            AttributeType: "S"
+
         KeySchema:
           -
             AttributeName: id
@@ -47,7 +60,12 @@ resources:
                 AttributeName: "email"
                 KeyType: "HASH"
             Projection:
-              ProjectionType: "ALL"
+              NonKeyAttributes:
+                - id
+                - firstname
+                - lastname
+                - username
+              ProjectionType: "INCLUDE"
 
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.dynamodb.users}
