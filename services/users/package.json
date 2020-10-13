@@ -1,0 +1,20 @@
+{
+  "name": "users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "users/handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.770.0",
+    "aws-sdk-mock": "^5.1.0",
+    "jest": "^26.5.3",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage=true"
+  },
+  "author": "mitchellshelton97@gmail.com",
+  "license": "ISC"
+}

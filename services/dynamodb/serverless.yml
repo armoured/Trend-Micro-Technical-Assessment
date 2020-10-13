@@ -33,21 +33,8 @@ resources:
             AttributeName: id
             AttributeType: "S"
           - 
-            AttributeName: firstname
-            AttributeType: "S"
-          - 
-            AttributeName: lastname
-            AttributeType: "S"
-          - 
             AttributeName: email
             AttributeType: "S"
-          -
-            AttributeName: username
-            AttributeType: "S"
-          - 
-            AttributeName: credentials
-            AttributeType: "S"
-
         KeySchema:
           -
             AttributeName: id

@@ -15,8 +15,8 @@ class UserManager {
        this.kms = new AWS.KMS({apiVersion: '2014-11-01', region: REGION});
     }
 
-    dispatch(method, event, callback) {
-        return this[method](event, callback);
+    async dispatch(method, event, callback) {
+        return this[method](event, callback);  
     }
 
     async create_user(event, callback) {
@@ -158,6 +158,7 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
+            console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
             return;
@@ -166,8 +167,6 @@ class UserManager {
         const data = {
             "Items": result.Items
         }
-
-        console.log(data)
 
         response = util.handle_response(200, data);
 
