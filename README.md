@@ -23,13 +23,13 @@ You must follow this order as deploying the users service depends on the dynamod
 
 ## Technical Explanation
 
-1. **Create a Serverless application.**
+**1. Create a Serverless application.**
 
 This was completed by following the documentation for serverless. https://www.serverless.com/framework/docs/
 
 For scalability purposes, I have suffixed resources with the stage name which will allow us to deploy this code for other environments.
 
-2. **Create a DynamoDB table in your AWS account to house "User" data.**
+**2. Create a DynamoDB table in your AWS account to house "User" data.**
 
 I utilise the serverless framework to create infrastructure as code. I can easily
 specify all the config needed to automatically deploy the users table. I have selected
@@ -42,7 +42,7 @@ during creation because I can query that email against existing emails.
 
 For security, if the cloudformation stack that deploys the table is deleted I have specified to retain the table to save the data.
 
-3. **Create Lambdas to create and list items from this DynamoDB table.**
+**3. Create Lambdas to create and list items from this DynamoDB table.**
 
 I also use serverless here to write infrastructure as code to automatically deploy
 lambda functions. For security, I utilise various IAM policies that is attached to
@@ -60,30 +60,30 @@ There is a substatial performance increase that can be done on the get_users lam
 
 Unfortunately, my code has lots of try/catch statements when calling AWS services. This is due to my limited experience with using the NodeJS async/await promise features as I come from a Python background. However, I have learnt rather quickly and show that I can transfer knowledge from one background to another easily. Given more time, I would be able to find a better way around this whether it be from reading up about best practices on the internet or learning from senior developers.
 
-4. **Keep credentials attribute as a write-only attribute.**
+**4. Keep credentials attribute as a write-only attribute.**
 
 This was achieved through IAM policies in serverless. I attach these policies on the Lambda execution environment. Following best practices, I took an allow-list approach where
 I specify all the attributes I want to allow to be read. This path was chosen instead of denying read access to credentials explicity because users can determine the names of denied attributes through the principle of least privilege. https://en.wikipedia.org/wiki/Principle_of_least_privilege
 
-5. **Upon save take the plain password and encrypt it using KMS with a user-defined CMK.**
+**5. Upon save take the plain password and encrypt it using KMS with a user-defined CMK.**
 
 In the lambda function for creating a user, I create a CMK and use it to encrypt the 
 credentials attribute supplied by the user. For security purposes, each user gets their own
 CMK rather than using a single CMK for all users.
 
-6. **Make the Lambda function available via an AWS API Gateway endpoint.**
+**6. Make the Lambda function available via an AWS API Gateway endpoint.**
 
 This was done in point 3
 
-7. **Write unit tests for your code by mocking AWS EC2 API.**
+**7. Write unit tests for your code by mocking AWS EC2 API.**
 
 I used Jest as the testing framework and mocked aws resources through the
 aws-sdk-mock package. 
 
-8. **Produce a code coverage report for your test suite.**
+**8. Produce a code coverage report for your test suite.**
 
 I used Jest to produce a code coverage report which currently has 100% code coverage.
 
-9. **Make response JSON:API 1.0 (https://jsonapi.org/format/1.0/) compatible.**
+**9. Make response JSON:API 1.0 (https://jsonapi.org/format/1.0/) compatible.**
 
 I wrapped responses in a 'data' object. If they are errors then I wrap them in an 'errors' array.
