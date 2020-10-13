@@ -50,6 +50,7 @@ Using a tool like postman https://www.postman.com/downloads/ feel free to send G
 
 Here is some sample data you can use for the POST request. Make sure to include this in the body in JSON format.
 
+```
 {
     "firstname": "Mitchell",
     "lastname": "Shelton",
@@ -57,4 +58,4 @@ Here is some sample data you can use for the POST request. Make sure to include 
     "username": "mitty",
     "credentials": "password"
 }
-
+```
