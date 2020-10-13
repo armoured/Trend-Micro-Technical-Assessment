@@ -45,6 +45,8 @@ during creation because I can query that email against existing emails.
 
 For security, if the cloudformation stack that deploys the table is deleted I have specified to retain the table to save the data.
 
+Future Work: Setup dynamodb backups for the dynamodb tables using serverless.
+
 **3. Create Lambdas to create and list items from this DynamoDB table.**
 
 I also use serverless here to write infrastructure as code to automatically deploy
@@ -54,12 +56,13 @@ important for security in the event an attacker gains access to the lambda, they
 
 I also attached these lambda functions to an api gateway endpoint through serverless.
 This is often useful for sending requests from outside of aws through the endpoint and also
-gives us the ability to later use a custom domain name.
+gives us the ability to later use a custom domain name if we get a certificate and setup DNS
+through Route53 or another DNS provider.
 
 For the application code, I implemented the object oriented dispatcher pattern. This allowed me to cleanly separate business logic from the lambda handler code. Based on the
 http method for the route, I can 'dispatch' the lambda event object to the relevant function whether it be create_user or get_users.
 
-There is a substatial performance increase that can be done on the get_users lambda function. When scanning for all users in the database, it would be slow if there are millions of entries as it scans from the first partition to the last partition with one thread. To speed this up we can create multiple threads and specify a partition starting point for each thread to scan from. Once done the results can be easily merged together. This would save a huge amount of time.
+Future Work: There is a substantial performance increase that can be done on the get_users lambda function. When scanning for all users in the database, it would be slow if there are millions of entries as it scans from the first partition to the last partition with one thread. To speed this up we can create multiple threads and specify a partition starting point for each thread to scan from. Once done the results can be easily merged together. This would save a huge amount of time.
 
 Unfortunately, my code has lots of try/catch statements when calling AWS services. This is due to my limited experience with using the NodeJS async/await promise features as I come from a Python background. However, I have learnt rather quickly and show that I can transfer knowledge from one background to another easily. Given more time, I would be able to find a better way around this whether it be from reading up about best practices on the internet or learning from senior developers.
 
