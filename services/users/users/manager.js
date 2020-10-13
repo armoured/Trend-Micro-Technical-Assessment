@@ -135,6 +135,7 @@ class UserManager {
 
         const user = {
             id: id,
+            type: 'user',
             firstname: body.firstname,
             lastname: body.lastname,
             email: body.email,

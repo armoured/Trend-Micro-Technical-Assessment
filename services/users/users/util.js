@@ -18,7 +18,9 @@ module.exports.handle_error = (status_code, error_message) => {
     return {
       statusCode: status_code,
       body: JSON.stringify({
-        errorMessage: error_message
+        errors: [{
+          errorMessage: error_message
+        }]
       })
     };
 }

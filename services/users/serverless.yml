@@ -104,6 +104,7 @@ resources:
                     ForAllValues:StringEquals: 
                       dynamodb:Attributes: 
                         - "id"
+                        - "type"
                         - "firstname"
                         - "lastname"
                         - "email"

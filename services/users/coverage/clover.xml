@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1602569933857" clover="3.2.0">
-  <project timestamp="1602569933857" name="All files">
+<coverage generated="1602575801185" clover="3.2.0">
+  <project timestamp="1602575801185" name="All files">
     <metrics statements="108" coveredstatements="108" conditionals="26" coveredconditionals="26" methods="16" coveredmethods="16" elements="150" coveredelements="150" complexity="0" loc="108" ncloc="108" packages="1" files="4" classes="4"/>
     <file name="manager.js" path="/Users/mitchell/Documents/trend-micro/Trend-Micro-Technical-Assessment/services/users/users/manager.js">
       <metrics statements="85" coveredstatements="85" conditionals="18" coveredconditionals="18" methods="9" coveredmethods="9"/>
@@ -72,33 +72,33 @@
       <line num="130" count="1" type="stmt"/>
       <line num="134" count="1" type="stmt"/>
       <line num="136" count="1" type="stmt"/>
-      <line num="144" count="1" type="stmt"/>
       <line num="145" count="1" type="stmt"/>
       <line num="146" count="1" type="stmt"/>
-      <line num="154" count="2" type="stmt"/>
+      <line num="147" count="1" type="stmt"/>
       <line num="155" count="2" type="stmt"/>
       <line num="156" count="2" type="stmt"/>
-      <line num="157" count="2" type="cond" truecount="2" falsecount="0"/>
-      <line num="158" count="1" type="stmt"/>
-      <line num="161" count="1" type="stmt"/>
+      <line num="157" count="2" type="stmt"/>
+      <line num="158" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="159" count="1" type="stmt"/>
       <line num="162" count="1" type="stmt"/>
       <line num="163" count="1" type="stmt"/>
       <line num="164" count="1" type="stmt"/>
-      <line num="167" count="1" type="stmt"/>
-      <line num="171" count="1" type="stmt"/>
-      <line num="173" count="1" type="stmt"/>
+      <line num="165" count="1" type="stmt"/>
+      <line num="168" count="1" type="stmt"/>
+      <line num="172" count="1" type="stmt"/>
       <line num="174" count="1" type="stmt"/>
-      <line num="181" count="1" type="stmt"/>
+      <line num="175" count="1" type="stmt"/>
+      <line num="182" count="1" type="stmt"/>
     </file>
     <file name="queries.js" path="/Users/mitchell/Documents/trend-micro/Trend-Micro-Technical-Assessment/services/users/users/queries.js">
       <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
       <line num="1" count="1" type="stmt"/>
       <line num="4" count="1" type="stmt"/>
       <line num="5" count="6" type="stmt"/>
-      <line num="16" count="1" type="stmt"/>
-      <line num="17" count="2" type="stmt"/>
-      <line num="23" count="1" type="stmt"/>
-      <line num="24" count="2" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="22" count="2" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="34" count="2" type="stmt"/>
     </file>
     <file name="settings.js" path="/Users/mitchell/Documents/trend-micro/Trend-Micro-Technical-Assessment/services/users/users/settings.js">
       <metrics statements="4" coveredstatements="4" conditionals="6" coveredconditionals="6" methods="0" coveredmethods="0"/>
@@ -116,11 +116,11 @@
       <line num="9" count="2" type="stmt"/>
       <line num="17" count="1" type="stmt"/>
       <line num="18" count="8" type="stmt"/>
-      <line num="26" count="1" type="stmt"/>
-      <line num="27" count="8" type="stmt"/>
-      <line num="28" count="36" type="cond" truecount="2" falsecount="0"/>
-      <line num="29" count="1" type="stmt"/>
-      <line num="32" count="7" type="stmt"/>
+      <line num="28" count="1" type="stmt"/>
+      <line num="29" count="8" type="stmt"/>
+      <line num="30" count="36" type="cond" truecount="2" falsecount="0"/>
+      <line num="31" count="1" type="stmt"/>
+      <line num="34" count="7" type="stmt"/>
     </file>
   </project>
 </coverage>

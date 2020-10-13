@@ -49,6 +49,7 @@ resources:
             Projection:
               NonKeyAttributes:
                 - id
+                - type
                 - firstname
                 - lastname
                 - username
