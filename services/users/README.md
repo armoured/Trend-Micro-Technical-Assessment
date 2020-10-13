@@ -41,11 +41,10 @@ that were deployed.
 
 They will look something like
 
-`
-  POST - https://pm7uuzazic.execute-api.ap-southeast-2.amazonaws.com/dev/users
+`POST - https://pm7uuzazic.execute-api.ap-southeast-2.amazonaws.com/dev/users`
 
-  GET - https://pm7uuzazic.execute-api.ap-southeast-2.amazonaws.com/dev/users
-`
+`GET - https://pm7uuzazic.execute-api.ap-southeast-2.amazonaws.com/dev/users`
+
 
 Using a tool like postman https://www.postman.com/downloads/ feel free to send GET and POST requests to the endpoints you got. 
 
