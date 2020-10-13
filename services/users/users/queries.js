@@ -1,6 +1,11 @@
 const { DYNAMODB_USERS } = require('./settings');
 
-
+/**
+ * 
+ * DynamoDB query for getting users by email from the EmailIndex GSI
+ * 
+ * @param {*} email the users email
+ */
 module.exports.get_user_from_email = (email) => {
     return {
         TableName: DYNAMODB_USERS,
@@ -18,6 +23,9 @@ module.exports.get_user_from_email = (email) => {
     }
 };
 
+/**
+ * DynamoDB scan to get all users
+ */
 module.exports.scan_users = () => {
     return {
         TableName: DYNAMODB_USERS,
@@ -30,6 +38,14 @@ module.exports.scan_users = () => {
     }
 }
 
+/**
+ * 
+ * DynamoDB put to create a new user on the users table
+ * 
+ * @param {*} id the generated uuid for the user
+ * @param {*} body the lambda event body
+ * @param {*} ciphertext_credentials the encrypted credentials
+ */
 module.exports.put_user = (id, body, ciphertext_credentials) => {
     return {
         TableName: DYNAMODB_USERS,
