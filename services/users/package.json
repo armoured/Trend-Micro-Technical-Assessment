@@ -15,6 +15,6 @@
     "test": "jest",
     "coverage": "jest --coverage=true"
   },
-  "author": "",
+  "author": "mitchellshelton97@gmail.com",
   "license": "ISC"
 }
