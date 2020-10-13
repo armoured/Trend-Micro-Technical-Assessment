@@ -103,7 +103,35 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -123,6 +151,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,6 +170,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,52 +195,75 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { DYNAMODB_USERS } = require('./settings');
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { DYNAMODB_USERS } = require("./settings");
 &nbsp;
-&nbsp;
+/**
+ *
+ * DynamoDB query for getting users by email from the EmailIndex GSI
+ *
+ * @param {*} email the users email
+ */
 module.exports.get_user_from_email = (email) =&gt; {
-    return {
-        TableName: DYNAMODB_USERS,
-        IndexName: 'EmailIndex',
-        ExpressionAttributeNames: {
-            "#id": "id", "#type": "type", 
-            "#firstname": "firstname", "#lastname": "lastname",
-            "#email": "email", "#username": "username"
-        },
-        ProjectionExpression: "#id, #type, #firstname, #lastname, #email, #username",
-        KeyConditionExpression: '#email = :email',
-        ExpressionAttributeValues: {
-            ':email': email
-        }
-    }
+  return {
+    TableName: DYNAMODB_USERS,
+    IndexName: "EmailIndex",
+    ExpressionAttributeNames: {
+      "#id": "id",
+      "#type": "type",
+      "#firstname": "firstname",
+      "#lastname": "lastname",
+      "#email": "email",
+      "#username": "username",
+    },
+    ProjectionExpression:
+      "#id, #type, #firstname, #lastname, #email, #username",
+    KeyConditionExpression: "#email = :email",
+    ExpressionAttributeValues: {
+      ":email": email,
+    },
+  };
 };
 &nbsp;
+/**
+ * DynamoDB scan to get all users
+ */
 module.exports.scan_users = () =&gt; {
-    return {
-        TableName: DYNAMODB_USERS,
-        ExpressionAttributeNames: {
-            "#id": "id", "#type": "type", 
-            "#firstname": "firstname", "#lastname": "lastname",
-            "#email": "email", "#username": "username"
-        },
-        ProjectionExpression: "#id,#type,#firstname,#lastname,#email,#username"
-    }
-}
+  return {
+    TableName: DYNAMODB_USERS,
+    ExpressionAttributeNames: {
+      "#id": "id",
+      "#type": "type",
+      "#firstname": "firstname",
+      "#lastname": "lastname",
+      "#email": "email",
+      "#username": "username",
+    },
+    ProjectionExpression: "#id,#type,#firstname,#lastname,#email,#username",
+  };
+};
 &nbsp;
+/**
+ *
+ * DynamoDB put to create a new user on the users table
+ *
+ * @param {*} id the generated uuid for the user
+ * @param {*} body the lambda event body
+ * @param {*} ciphertext_credentials the encrypted credentials
+ */
 module.exports.put_user = (id, body, ciphertext_credentials) =&gt; {
-    return {
-        TableName: DYNAMODB_USERS,
-        Item: {
-            id: id,
-            type: 'users',
-            firstname: body.firstname,
-            lastname: body.lastname,
-            email: body.email,
-            username: body.username,
-            credentials: ciphertext_credentials
-        }
-    }
-}
+  return {
+    TableName: DYNAMODB_USERS,
+    Item: {
+      id: id,
+      type: "users",
+      firstname: body.firstname,
+      lastname: body.lastname,
+      email: body.email,
+      username: body.username,
+      credentials: ciphertext_credentials,
+    },
+  };
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -202,7 +271,7 @@ module.exports.put_user = (id, body, ciphertext_credentials) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Oct 13 2020 19:57:48 GMT+1100 (Australian Eastern Daylight Time)
+                at Tue Oct 13 2020 20:50:20 GMT+1100 (Australian Eastern Daylight Time)
             </div>
         </div>
         <script src="prettify.js"></script>
