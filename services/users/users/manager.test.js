@@ -33,6 +33,7 @@ const database = [
         username: 'mitty',
         email: 'mitchellshelton979@gmail.com',
         id: 'd399d7bc-021d-4138-80ac-286d2d6b4e4e',
+        type: 'user',
         credentials: "AQICAHjQ7sViXQdeS4wWbFZpkOQWvCdNXqiy4Cnz0/xEBe39SQGz0vofeAo0+SyOXv172fqkAAAAZjBkBgkqhkiG9w0BBwagVzBVAgEAMFAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMhchHh0ugGzwRTC4gAgEQgCMlkhYlCYk2SfYIkfQ6ruwA71KBcN7ih/OPzSE86OT/eBOz3Q=="
     },
     {
@@ -41,6 +42,7 @@ const database = [
         username: 'Johny',
         email: 'john@gmail.com',
         id: 'k4gk4i9v-49cd-42gd-42dk-smbor349fmsr',
+        type: 'user',
         credentials: "ACICAHjQ7sViXQdeS4wWbFZpkOQWvCdNXqiy4Cnz0/xEBe39SQGz0vofeAo0+SyOXv172fqkAAAAZjBkBgkqhkiG9w0BBwagVzBVAgEAMFAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMhchHh0ugGzwRTC4gAgEQgCMlkhYlCYk2SfYIkfQ6ruwA71KBcN7ih/OPzSE86OT/eBOz3Q=="
     },
     {
@@ -49,6 +51,7 @@ const database = [
         username: 'john wick',
         email: 'keanu.reeves@gmail.com',
         id: 'fgu593md-r8mf-475d-gksl-vme93tife3rf',
+        type: 'user',
         credentials: "ADICAHjQ7sViXQdeS4wWbFZpkOQWvCdNXqiy4Cnz0/xEBe39SQGz0vofeAo0+SyOXv172fqkAAAAZjBkBgkqhkiG9w0BBwagVzBVAgEAMFAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMhchHh0ugGzwRTC4gAgEQgCMlkhYlCYk2SfYIkfQ6ruwA71KBcN7ih/OPzSE86OT/eBOz3Q=="
     }
 ]
@@ -168,7 +171,7 @@ test('create user already exists', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "User Already Exists"})
+            expect(body).toEqual({errors:[{errorMessage: "User Already Exists"}]})
             done();
           } catch (error) {
             done(error);
@@ -218,7 +221,7 @@ test('create user invalid email format', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "Invalid Email Format"})
+            expect(body).toEqual({errors:[{errorMessage: "Invalid Email Format"}]})
             done();
           } catch (error) {
             done(error);
@@ -266,7 +269,7 @@ test('create user missing parameters', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "Missing key firstname in body"})
+            expect(body).toEqual({errors:[{errorMessage: "Missing key firstname in body"}]})
             done();
           } catch (error) {
             done(error);
@@ -297,7 +300,7 @@ test('get users scan fail', async (done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400)
-            expect(body).toEqual({errorMessage: "Scan Failed"})
+            expect(body).toEqual({errors:[{errorMessage: "Scan Failed"}]})
             done();
           } catch (error) {
             done(error);
@@ -342,7 +345,7 @@ test('create user query email fail', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "Query Email Failed"})
+            expect(body).toEqual({errors:[{errorMessage: "Query Email Failed"}]})
             done();
           } catch (error) {
             done(error);
@@ -388,7 +391,7 @@ test('create user create kms key fail', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "KMS Create Key Failed"})
+            expect(body).toEqual({errors:[{errorMessage: "KMS Create Key Failed"}]})
             done();
           } catch (error) {
             done(error);
@@ -434,7 +437,7 @@ test('create user encrypt kms credentials fail', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "KMS Encrypt Credentials Failed"})
+            expect(body).toEqual({errors:[{errorMessage: "KMS Encrypt Credentials Failed"}]})
             done();
           } catch (error) {
             done(error);
@@ -480,7 +483,7 @@ test('create user put user fail', async(done) => {
             const body = JSON.parse(data.body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
-            expect(body).toEqual({errorMessage: "DynamoDB Put User Failed"})
+            expect(body).toEqual({errors:[{errorMessage: "DynamoDB Put User Failed"}]})
             done();
           } catch (error) {
             done(error);
