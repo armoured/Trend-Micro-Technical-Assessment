@@ -43,6 +43,7 @@ They will look something like
 
 `
   POST - https://pm7uuzazic.execute-api.ap-southeast-2.amazonaws.com/dev/users
+
   GET - https://pm7uuzazic.execute-api.ap-southeast-2.amazonaws.com/dev/users
 `
 
