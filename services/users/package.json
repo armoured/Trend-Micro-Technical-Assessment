@@ -12,7 +12,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage=true"
   },
   "author": "",
   "license": "ISC"

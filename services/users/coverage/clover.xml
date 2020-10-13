@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1602569707881" clover="3.2.0">
-  <project timestamp="1602569707882" name="All files">
+<coverage generated="1602569933857" clover="3.2.0">
+  <project timestamp="1602569933857" name="All files">
     <metrics statements="108" coveredstatements="108" conditionals="26" coveredconditionals="26" methods="16" coveredmethods="16" elements="150" coveredelements="150" complexity="0" loc="108" ncloc="108" packages="1" files="4" classes="4"/>
     <file name="manager.js" path="/Users/mitchell/Documents/trend-micro/Trend-Micro-Technical-Assessment/services/users/users/manager.js">
       <metrics statements="85" coveredstatements="85" conditionals="18" coveredconditionals="18" methods="9" coveredmethods="9"/>
