@@ -15,8 +15,8 @@ class UserManager {
        this.kms = new AWS.KMS({apiVersion: '2014-11-01', region: REGION});
     }
 
-    dispatch(method, event, callback) {
-        return this[method](event, callback);
+    async dispatch(method, event, callback) {
+        return this[method](event, callback);  
     }
 
     async create_user(event, callback) {
@@ -24,6 +24,7 @@ class UserManager {
         var response;
 
         const body = JSON.parse(event.body)
+        console.log(body)
         // const body = event.body
 
         // Check firstname, lastname, email and username in body
@@ -57,6 +58,7 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
+            console.log("fail")
             console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
@@ -130,6 +132,8 @@ class UserManager {
             return;
         }
 
+        console.log(result);
+
         // The user has been successfully created.
         console.log("User Successfully Created");
 
@@ -158,9 +162,10 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
+            console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
-            return;
+            process.exit(1);
         }
 
         const data = {
