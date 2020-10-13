@@ -58,7 +58,7 @@ http method for the route, I can 'dispatch' the lambda event object to the relev
 
 There is a substatial performance increase that can be done on the get_users lambda function. When scanning for all users in the database, it would be slow if there are millions of entries as it scans from the first partition to the last partition with one thread. To speed this up we can create multiple threads and specify a partition starting point for each thread to scan from. Once done the results can be easily merged together. This would save a huge amount of time.
 
-Unfortunately, my code has lots of try/catch statements when calling AWS services. This is due to my limited experience with using the NodeJS async/await promise features as I come from a Python background. However, I have learnt rather quickly and show that I can transfer knowledge from one background to another easily.
+Unfortunately, my code has lots of try/catch statements when calling AWS services. This is due to my limited experience with using the NodeJS async/await promise features as I come from a Python background. However, I have learnt rather quickly and show that I can transfer knowledge from one background to another easily. Given more time, I would be able to find a better way around this whether it be from reading up about best practices on the internet or learning from senior developers.
 
 4. Keep credentials attribute as a write-only attribute.
 
