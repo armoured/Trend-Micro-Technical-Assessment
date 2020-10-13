@@ -27,6 +27,9 @@ You must follow this order as deploying the users service depends on the dynamod
 
 This was completed by following the documentation for serverless. https://www.serverless.com/framework/docs/
 
+I have decided two split the application into two services. A 'dynamodb' service and 'users' service.
+The motivation here was to make resources such as database tables separate from the application code of the 'users' service. The hope here is to make it easy to manage the database tables for maintainability purposes.
+
 For scalability purposes, I have suffixed resources with the stage name which will allow us to deploy this code for other environments.
 
 **2. Create a DynamoDB table in your AWS account to house "User" data.**
