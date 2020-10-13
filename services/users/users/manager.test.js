@@ -79,7 +79,7 @@ test('get users successfully', async (done) => {
 
     var user_manager = new UserManager();
 
-    await user_manager.get_users(event, callback)
+    await user_manager.dispatch('get_users', event, callback)
 
     AWS.restore('DynamoDB.DocumentClient');
 
@@ -129,7 +129,7 @@ test('create user successfully', async(done) => {
 
     var user_manager = new UserManager();
 
-    await user_manager.create_user(event, callback)
+    await user_manager.dispatch('create_user', event, callback)
 
     AWS.restore('DynamoDB.DocumentClient');
     AWS.restore('KMS');
@@ -178,7 +178,57 @@ test('create user already exists', async(done) => {
 
     var user_manager = new UserManager();
 
-    await user_manager.create_user(event, callback)
+    await user_manager.dispatch('create_user', event, callback)
+
+    AWS.restore('DynamoDB.DocumentClient');
+    AWS.restore('KMS');
+
+});
+
+test('create user invalid email format', async(done) => {
+
+    // copy the user because we are changing the email
+    var user = Object.assign({}, users_before[0]);
+    user.email = "mitchgmail.com";
+
+    // below are mocked just so we don't call aws if
+    // the test somehow gets past the parameter check
+    AWS.mock('DynamoDB.DocumentClient', 'query', function(params, callback) {
+        callback(null, {});
+    });
+
+    AWS.mock('KMS', 'createKey', function(params, callback) {
+        callback(null, {});
+    });
+
+    AWS.mock('KMS', 'encrypt', function(params, callback) {
+        callback(null, {});
+    });
+
+    AWS.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
+        callback(null, {});
+    });
+
+
+    const event = {
+        body: JSON.stringify(user)
+    };
+    var callback = (err, data) => {
+        try {
+            const body = JSON.parse(data.body);
+            expect(err).toEqual(null);
+            expect(data.statusCode).toEqual(400);
+            expect(body).toEqual({errorMessage: "Invalid Email Format"})
+            done();
+          } catch (error) {
+            done(error);
+          }
+       
+    };
+
+    var user_manager = new UserManager();
+
+    await user_manager.dispatch('create_user', event, callback)
 
     AWS.restore('DynamoDB.DocumentClient');
     AWS.restore('KMS');
@@ -214,7 +264,6 @@ test('create user missing parameters', async(done) => {
     var callback = (err, data) => {
         try {
             const body = JSON.parse(data.body);
-            console.log(body);
             expect(err).toEqual(null);
             expect(data.statusCode).toEqual(400);
             expect(body).toEqual({errorMessage: "Missing key firstname in body"})
@@ -227,7 +276,221 @@ test('create user missing parameters', async(done) => {
 
     var user_manager = new UserManager();
 
-    await user_manager.create_user(event, callback)
+    await user_manager.dispatch('create_user', event, callback)
+
+    AWS.restore('DynamoDB.DocumentClient');
+    AWS.restore('KMS');
+
+});
+
+// AWS fail Checks
+
+test('get users scan fail', async (done) => {
+
+    AWS.mock('DynamoDB.DocumentClient', 'scan', function(params, callback) {
+        callback({statusCode: 400, code: "Scan Failed"}, null);
+    });
+
+    const event = {};
+    var callback = (err, data) => {
+        try {
+            const body = JSON.parse(data.body);
+            expect(err).toEqual(null);
+            expect(data.statusCode).toEqual(400)
+            expect(body).toEqual({errorMessage: "Scan Failed"})
+            done();
+          } catch (error) {
+            done(error);
+          }
+       
+    };
+
+    var user_manager = new UserManager();
+
+    await user_manager.dispatch('get_users', event, callback)
+
+    AWS.restore('DynamoDB.DocumentClient');
+
+});
+
+test('create user query email fail', async(done) => {
+
+    var user = users_before[0];
+
+    AWS.mock('DynamoDB.DocumentClient', 'query', function(params, callback) {
+        callback({statusCode: 400, code: "Query Email Failed"}, null);
+    });
+
+    AWS.mock('KMS', 'createKey', function(params, callback) {
+        callback(null, {KeyMetadata: {KeyId: "1234abcd-12ab-34cd-56ef-1234567890ab"}});
+    });
+
+    AWS.mock('KMS', 'encrypt', function(params, callback) {
+        callback(null, { CiphertextBlob: "encrypted-password" });
+    });
+
+    AWS.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
+        callback(null, {});
+    });
+
+
+    const event = {
+        body: JSON.stringify(user)
+    };
+    var callback = (err, data) => {
+        try {
+            const body = JSON.parse(data.body);
+            expect(err).toEqual(null);
+            expect(data.statusCode).toEqual(400);
+            expect(body).toEqual({errorMessage: "Query Email Failed"})
+            done();
+          } catch (error) {
+            done(error);
+          }
+       
+    };
+
+    var user_manager = new UserManager();
+
+    await user_manager.dispatch('create_user', event, callback)
+
+    AWS.restore('DynamoDB.DocumentClient');
+    AWS.restore('KMS');
+
+});
+
+test('create user create kms key fail', async(done) => {
+
+    var user = users_before[0];
+
+    AWS.mock('DynamoDB.DocumentClient', 'query', function(params, callback) {
+        callback(null, { Items: [], Count: 0, ScannedCount: 0 });
+    });
+
+    AWS.mock('KMS', 'createKey', function(params, callback) {
+        callback({statusCode: 400, code: "KMS Create Key Failed"}, null);
+    });
+
+    AWS.mock('KMS', 'encrypt', function(params, callback) {
+        callback(null, { CiphertextBlob: "encrypted-password" });
+    });
+
+    AWS.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
+        callback(null, {});
+    });
+
+
+    const event = {
+        body: JSON.stringify(user)
+    };
+    var callback = (err, data) => {
+        try {
+            const body = JSON.parse(data.body);
+            expect(err).toEqual(null);
+            expect(data.statusCode).toEqual(400);
+            expect(body).toEqual({errorMessage: "KMS Create Key Failed"})
+            done();
+          } catch (error) {
+            done(error);
+          }
+       
+    };
+
+    var user_manager = new UserManager();
+
+    await user_manager.dispatch('create_user', event, callback)
+
+    AWS.restore('DynamoDB.DocumentClient');
+    AWS.restore('KMS');
+
+});
+
+test('create user encrypt kms credentials fail', async(done) => {
+
+    var user = users_before[0];
+
+    AWS.mock('DynamoDB.DocumentClient', 'query', function(params, callback) {
+        callback(null, { Items: [], Count: 0, ScannedCount: 0 });
+    });
+
+    AWS.mock('KMS', 'createKey', function(params, callback) {
+        callback(null, {KeyMetadata: {KeyId: "1234abcd-12ab-34cd-56ef-1234567890ab"}});
+    });
+
+    AWS.mock('KMS', 'encrypt', function(params, callback) {
+        callback({statusCode: 400, code: "KMS Encrypt Credentials Failed"}, null);
+    });
+
+    AWS.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
+        callback(null, {});
+    });
+
+
+    const event = {
+        body: JSON.stringify(user)
+    };
+    var callback = (err, data) => {
+        try {
+            const body = JSON.parse(data.body);
+            expect(err).toEqual(null);
+            expect(data.statusCode).toEqual(400);
+            expect(body).toEqual({errorMessage: "KMS Encrypt Credentials Failed"})
+            done();
+          } catch (error) {
+            done(error);
+          }
+       
+    };
+
+    var user_manager = new UserManager();
+
+    await user_manager.dispatch('create_user', event, callback)
+
+    AWS.restore('DynamoDB.DocumentClient');
+    AWS.restore('KMS');
+
+});
+
+test('create user put user fail', async(done) => {
+
+    var user = users_before[0];
+
+    AWS.mock('DynamoDB.DocumentClient', 'query', function(params, callback) {
+        callback(null, { Items: [], Count: 0, ScannedCount: 0 });
+    });
+
+    AWS.mock('KMS', 'createKey', function(params, callback) {
+        callback(null, {KeyMetadata: {KeyId: "1234abcd-12ab-34cd-56ef-1234567890ab"}});
+    });
+
+    AWS.mock('KMS', 'encrypt', function(params, callback) {
+        callback(null, { CiphertextBlob: "encrypted-password" });
+    });
+
+    AWS.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
+        callback({statusCode: 400, code: "DynamoDB Put User Failed"}, null);
+    });
+
+
+    const event = {
+        body: JSON.stringify(user)
+    };
+    var callback = (err, data) => {
+        try {
+            const body = JSON.parse(data.body);
+            expect(err).toEqual(null);
+            expect(data.statusCode).toEqual(400);
+            expect(body).toEqual({errorMessage: "DynamoDB Put User Failed"})
+            done();
+          } catch (error) {
+            done(error);
+          }
+       
+    };
+
+    var user_manager = new UserManager();
+
+    await user_manager.dispatch('create_user', event, callback)
 
     AWS.restore('DynamoDB.DocumentClient');
     AWS.restore('KMS');

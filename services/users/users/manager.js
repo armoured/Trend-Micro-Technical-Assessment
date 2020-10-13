@@ -24,7 +24,6 @@ class UserManager {
         var response;
 
         const body = JSON.parse(event.body)
-        console.log(body)
         // const body = event.body
 
         // Check firstname, lastname, email and username in body
@@ -58,7 +57,6 @@ class UserManager {
                 else return data;
             }).promise();
         } catch (err) {
-            console.log("fail")
             console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
@@ -132,8 +130,6 @@ class UserManager {
             return;
         }
 
-        console.log(result);
-
         // The user has been successfully created.
         console.log("User Successfully Created");
 
@@ -165,14 +161,12 @@ class UserManager {
             console.log(err)
             response = util.handle_error(err.statusCode, err.code);
             callback(null, response)
-            process.exit(1);
+            return;
         }
 
         const data = {
             "Items": result.Items
         }
-
-        console.log(data)
 
         response = util.handle_response(200, data);
 
