@@ -24,7 +24,6 @@ class UserManager {
         var response;
 
         const body = JSON.parse(event.body)
-        // const body = event.body
 
         // Check firstname, lastname, email and username in body
         const body_keys = ['firstname', 'lastname', 'email', 'username', 'credentials']
