@@ -56,7 +56,7 @@ gives us the ability to later use a custom domain name.
 For the application code, I implemented the object oriented dispatcher pattern. This allowed me to cleanly separate business logic from the lambda handler code. Based on the
 http method for the route, I can 'dispatch' the lambda event object to the relevant function whether it be create_user or get_users.
 
-There is a substatial performance increase that can be done on the get_users lambda function. When scanning for all users in the database, it would be slow if there are millions of entrys as it scans from the first partition to the last partition with one thread. To speed this up we can create multiple threads and specify a partition starting point for each thread to scan from. Once done the results can be easily merged together. This would save a huge amount of time.
+There is a substatial performance increase that can be done on the get_users lambda function. When scanning for all users in the database, it would be slow if there are millions of entries as it scans from the first partition to the last partition with one thread. To speed this up we can create multiple threads and specify a partition starting point for each thread to scan from. Once done the results can be easily merged together. This would save a huge amount of time.
 
 Unfortunately, my code has lots of try/catch statements when calling AWS services. This is due to my limited experience with using the NodeJS async/await promise features as I come from a Python background. However, I have learnt rather quickly and show that I can transfer knowledge from one background to another easily.
 
