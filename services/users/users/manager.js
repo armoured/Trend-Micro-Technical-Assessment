@@ -7,18 +7,52 @@ var queries = require ('./queries');
 
 const { REGION } = require('./settings');
 
-
+/**
+ * Contains functions to create and get users.
+ * Utilises the dispatch pattern which calls
+ * the supplied method on the class, allowing business logic
+ * to separate nicely from the lambda handler.
+ *  
+ * Also helpful to hold AWS clients.
+ */
 class UserManager {
 
+    /**
+     * initialise AWS Clients
+     */
     constructor() {
        this.document_client = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10', region: REGION});
        this.kms = new AWS.KMS({apiVersion: '2014-11-01', region: REGION});
     }
 
+    /**
+     * 
+     * Dispatches a lambda event and callback to the supplied method
+     * 
+     * @param {*} method The method to call on the current class
+     * @param {*} event the lambda event
+     * @param {*} callback the lambda callback
+     */
     async dispatch(method, event, callback) {
         return this[method](event, callback);  
     }
 
+    /**
+     * 
+     * Creates a user.
+     * 
+     * Expects event to contain a body property like:
+     * {
+     *     "firstname": "Mitchell",
+     *     "lastname": "Shelton",
+     *     "email": "mitchellshelton97@gmail.com",
+     *     "username": "mitty",
+     *     "credentials": "password"
+     * }
+     * 
+     * @param {*} event the lambda event
+     * @param {*} callback the lambda callback
+     */
     async create_user(event, callback) {
 
         var response;
@@ -146,11 +180,25 @@ class UserManager {
         return;
     }
 
+    /**
+     * 
+     * Gets all the users from the users table. 
+     * Uses a naive scan of the table. This can be
+     * improved in the future by using multiple threads that 
+     * scan based on a partition starting point to take advantage
+     * of dynamodb partitions.
+     * 
+     * @param {*} event the lambda event
+     * @param {*} callback the lambda callback
+     */
     async get_users(event, callback) {
 
 
         var response;
 
+        // Scan the users table for all users.
+        // The credentials key should not show up here as
+        // the execution lambda doesn't have permissions to read it.
         const params = queries.scan_users();
         try {
             var result = await this.document_client.scan(params, (err, data) => {
